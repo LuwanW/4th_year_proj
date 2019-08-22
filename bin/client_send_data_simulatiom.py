@@ -31,14 +31,16 @@ class Scope(object):
             self.tdata = [self.tdata[-1]]
             self.ydata = [self.ydata[-1]]
             self.ax.set_xlim(self.tdata[0], self.tdata[0] + self.maxt)
-            print(self.tdata, self.ydata)
             self.ax.figure.canvas.draw()
 
         t = self.tdata[-1] + self.dt
         self.tdata.append(t)
         self.ydata.append(y)
         self.line.set_data(self.tdata, self.ydata)
-        #print(t,y)
+
+        # dump data and send data through socket
+        # todo: use real measured data instead of simulation
+        print(t,y)
         msg = [t,y]
         data=pickle.dumps(msg)
         s.send(data)
@@ -57,7 +59,6 @@ def emitter(p=0.03):
 # Fixing random state for reproducibility
 np.random.seed(19680801)
 
-
 fig, ax = plt.subplots()
 scope = Scope(ax)
 
@@ -65,5 +66,5 @@ scope = Scope(ax)
 ani = animation.FuncAnimation(fig, scope.update, emitter, interval=10,
                               blit=True)
 
-
+plt.title("sent data")
 plt.show()
