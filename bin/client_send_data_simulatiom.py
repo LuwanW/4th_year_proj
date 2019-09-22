@@ -1,11 +1,12 @@
 #!/usr/bin/env python
+import matplotlib
+matplotlib.use('TKAgg')
 import numpy as np
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pickle
 import socket
-
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65432        # The port used by the server
 
@@ -73,7 +74,7 @@ scope = Scope(ax)
 
 # pass a generator in "emitter" to produce data for the update func
 ani = animation.FuncAnimation(fig, scope.update, emitter, interval=10,
-                              blit=True)
+                              blit=False)
 
 plt.title("sent data")
 plt.show()

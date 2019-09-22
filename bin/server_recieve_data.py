@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
+import matplotlib
+matplotlib.use('TKAgg')
 import socket
 import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
-from matplotlib import style
 from matplotlib.lines import Line2D
 import pickle
 import sqlite3
@@ -40,7 +41,7 @@ s.bind((HOST, PORT))
 s.listen(5)
 socket_conn, addr = s.accept()
 
-# functions 
+# functions
 # todo: move functions to module
 def recieve_data():
 	while True:
@@ -80,12 +81,12 @@ class Scope(object):
             self.ax.figure.canvas.draw()
         self.tdata.append(t)
         self.gdata.append(g)
-        
+
         cursor.execute('''INSERT INTO raw_data(time, gain)
         VALUES(?,?)''',(float(t),float(g)))
         print(t,g)
         db.commit()
-        
+
         self.line.set_data(self.tdata, self.gdata)
         return self.line,
 
@@ -96,13 +97,8 @@ scope = Scope(ax)
 
 # pass a generator in "emitter" to produce data for the update func
 ani = animation.FuncAnimation(fig, scope.update, passer, interval=10,
-                              blit=True)
+                              blit=False)
 plt.title("recieved data")
 plt.show()
 
 db.close()
-
-
-
-
-
